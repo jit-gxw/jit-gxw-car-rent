@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jit.gxw.mapper.OrderMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into orders
+        (number, status, appointment_id, user_id, vehicle_id, vehicle_name, license_plate_number,cash_pledge ,collection_time, return_time, remark, amount,pay_status, cash_pledge_status, user_name, id_number, licence_id, phone,order_time)
+        VALUES(#{number},#{status},#{appointmentId},#{userId},#{vehicleId},#{vehicleName},#{licensePlateNumber},#{cashPledge},#{collectionTime},#{returnTime},#{remark},#{amount},#{payStatus},#{cashPledgeStatus},#{userName},#{idNumber},#{licenceId},#{phone},#{orderTime})
+    </insert>
+    <update id="update">
+        update orders
+        <set>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="reletStatus!=null">
+                relet_status=#{reletStatus},
+            </if>
+            <if test="reletId!=null">
+                relet_id=#{reletId},
+            </if>
+            <if test="collectionTime!=null">
+                collection_time=#{collectionTime},
+            </if>
+            <if test="returnTime!=null">
+                return_time=#{returnTime},
+            </if>
+            <if test="payStatus!=null">
+                pay_status=#{payStatus},
+            </if>
+            <if test="cashPledgeStatus!=null">
+                cash_pledge_status=#{cashPledgeStatus},
+            </if>
+            <if test="extraCharges!=null">
+                extra_charges=#{extraCharges},
+            </if>
+            <if test="amount!=null">
+                amount=#{amount},
+            </if>
+            <if test="cancelTime!=null">
+                cancel_time=#{cancelTime},
+            </if>
+            <if test="cancelReason!=null">
+                cancel_reason=#{cancelReason},
+            </if>
+            <if test="completionTime!=null">
+                completion_time=#{completionTime},
+            </if>
+            <if test="isDel!=null">
+                is_del=#{isDel},
+            </if>
+        </set>
+        where is_del=0 and id=#{id}
+    </update>
+
+
+    <select id="selectVehicelIdByTime" resultType="java.lang.Long">
+
+            select vehicle_id
+            from orders
+            <where>
+                <if test="begin!=null and end!= null">
+                    and ((collection_time &lt;= #{begin} and return_time &lt;= #{end} and return_time &gt;= #{begin})
+                        or (collection_time &gt;= #{begin} and return_time &gt;= #{end} and collection_time &lt;= #{end})
+                        or (collection_time &gt;= #{begin} and return_time &lt;= #{end})
+                        or(collection_time &lt;= #{begin} and return_time &gt;= #{end}))
+                </if>
+                and (status=0 or status=1 or status=2)
+                and is_del=0
+            </where>
+
+    </select>
+    <select id="selectForConfirm" resultType="jit.gxw.entity.Orders">
+        select *
+        from orders
+        where
+
+            ((collection_time &lt;= #{collectionTime} and return_time &lt;= #{returnTime} and return_time &gt;= #{collectionTime})
+                or (collection_time &gt;= #{collectionTime} and return_time &gt;= #{returnTime} and collection_time &lt;= #{returnTime})
+                or (collection_time &gt;= #{collectionTime} and return_time &lt;= #{returnTime})
+                or(collection_time &lt;= #{collectionTime} and return_time &gt;= #{returnTime}))
+
+                and vehicle_id=#{vehicleId}
+                and (status=0 or status=1 or status=2)
+                and is_del=0
+
+    </select>
+    <select id="selectByVehicleIdAndTimeForConfirm" resultType="jit.gxw.entity.Orders">
+        select *
+        from orders
+        where vehicle_id=#{vehicleId}
+        and ((collection_time &lt;= #{collectionTime} and return_time &lt;= #{returnTime} and return_time &gt;= #{collectionTime})
+            or (collection_time &gt;= #{collectionTime} and return_time &gt;= #{returnTime} and collection_time &lt;= #{returnTime})
+            or (collection_time &gt;= #{collectionTime} and return_time &lt;= #{returnTime})
+            or(collection_time &lt;= #{collectionTime} and return_time &gt;= #{returnTime}))
+        and (status=0 or status=1 or status=2)
+    </select>
+    <select id="pageQuery" resultType="jit.gxw.entity.Orders">
+        select *
+        from orders
+        <where>
+            <if test="beginTime!=null ">
+                and order_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null ">
+                and order_time &lt;= #{endTime}
+            </if>
+            <if test="number != null ">
+                and number like concat('%',#{number},'%')
+            </if>
+            <if test="phone != null ">
+                and phone like concat('%',#{phone},'%')
+            </if>
+            <if test="status != null ">
+                and status =#{status}
+            </if>
+            and is_del=0
+        </where>
+        order by order_time desc
+    </select>
+    <select id="historyOrders" resultType="jit.gxw.vo.OrderUserVO">
+        select orders.*,vehicle.image
+        from orders left join vehicle on orders.vehicle_id = vehicle.id
+        <where>
+            user_id=#{userId} and orders.is_del=0
+            <if test="status!=null">
+               and orders.status=#{status}
+            </if>
+        </where>
+        order by order_time desc
+    </select>
+</mapper>

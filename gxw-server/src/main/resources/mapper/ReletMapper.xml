@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jit.gxw.mapper.ReletMapper">
+
+    <insert id="insert">
+        insert into relet
+        (orders_id, number, status, return_time, relet_info, relet_time)
+        VALUES (#{ordersId},#{number},#{status},#{returnTime},#{reletInfo},#{reletTime})
+    </insert>
+    <update id="update">
+        update relet
+        <set>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="employeeId!=null">
+                employee_id=#{employeeId},
+            </if>
+            <if test="employeeName!=null">
+                employee_name=#{employeeName},
+            </if>
+            <if test="cancelReason!=null">
+                cancel_reason=#{cancelReason},
+            </if>
+            <if test="rejectionReason!=null">
+                rejection_reason=#{rejectionReason},
+            </if>
+            <if test="cancelTime!=null">
+                cancel_time=#{cancelTime},
+            </if>
+            <if test="passTime!=null">
+                pass_time=#{passTime},
+            </if>
+            <if test="isDel!=null">
+                is_del=#{isDel},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="selectWithCondition" resultType="jit.gxw.vo.ReletVO">
+        select * from relet
+        <where>
+            <if test="number!=null and number!=''">
+                number like concat('%',#{number},'%')
+            </if>
+            <if test="employeeName!=null and employeeName!=''">
+               and employee_name like concat('%',#{employeeName},'%')
+            </if>
+            <if test="status!=null">
+               and status =#{status}
+            </if>
+            and is_del=0
+        </where>
+            order by relet_time desc
+    </select>
+</mapper>

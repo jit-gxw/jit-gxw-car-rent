@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jit.gxw.mapper.FaultMapper">
+
+    <insert id="insert">
+        insert into fault (vehicle_id,license_plate_number,informant_role, informant_id, information,status, notification_time)
+        VALUES (#{vehicleId},#{licensePlateNumber},#{informantRole},#{informantId},#{information},#{status},#{notificationTime})
+    </insert>
+    <update id="update">
+        update fault
+        <set>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="employeeId!=null">
+                employee_id=#{employeeId},
+            </if>
+            <if test="employeeName!=null">
+                employee_name=#{employeeName},
+            </if>
+            <if test="reason!=null">
+                reason=#{reason},
+            </if>
+            <if test="repairTime!=null">
+                repair_time=#{repairTime},
+            </if>
+            <if test="completionTime!=null">
+                completion_time=#{completionTime},
+            </if>
+            <if test="solution!=null">
+                solution=#{solution},
+            </if>
+            <if test="cost!=null">
+                cost=#{cost},
+            </if>
+            <if test="isDel!=null">
+                is_del=#{isDel},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="pageQuery" resultType="jit.gxw.entity.Fault">
+        select fault.*,
+        case
+        when fault.informant_role = 0 then employee.name
+        when fault.informant_role = 1 then user.name
+        end as informantName
+        from fault
+            left join employee on fault.informant_id=employee.id and fault.informant_role=0
+            left join user on fault.informant_id=user.id and fault.informant_role=1
+        <where>
+            <if test="beginTime != null and beginTime !=''">
+                and fault.notification_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null and endTime !=''">
+                and fault.notification_time &lt;= #{endTime}
+            </if>
+            <if test="licensePlateNumber!=null and licensePlateNumber !=''">
+                and fault.license_plate_number like concat('%',#{licensePlateNumber},'%')
+            </if>
+            <if test="informantRole!=null and informantRole !=''">
+                and fault.informant_role =#{informantRole}
+            </if>
+            <if test="status!=null and status !=''">
+                and fault.status =#{status}
+            </if>
+                 and fault.is_del=0
+        </where>
+        order by notification_time desc
+    </select>
+</mapper>

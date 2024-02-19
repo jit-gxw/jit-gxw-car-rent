@@ -1,0 +1,65 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+      driver-class-name: ${gxw.datasource.driver-class-name}
+      url: jdbc:mysql://${gxw.datasource.host}:${gxw.datasource.port}/${gxw.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${gxw.datasource.username}
+      password: ${gxw.datasource.password}
+  redis:
+    host: ${gxw.redis.host}
+    port: ${gxw.redis.port}
+    password: ${gxw.redis.password}
+    database: ${gxw.redis.database}
+
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: jit.gxw.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    jit:
+      gxw:
+        mapper: debug
+        service: info
+        controller: info
+
+gxw:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: jitgxw
+    # 设置jwt过期时间
+    admin-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: token
+    # 设置jwt签名加密时使用的秘钥
+    user-secret-key: cngxw
+    # 设置jwt过期时间
+    user-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    user-token-name: Authorization
+
+  alioss:
+    endpoint: ${gxw.alioss.endpoint}
+    bucketName: ${gxw.alioss.bucketName}
+  wechat:
+    appid: ${gxw.wechat.appid}
+    secret: ${gxw.wechat.secret}
+    mchid: ${gxw.wechat.mchid}
+    mch-serial-no: ${gxw.wechat.mch-serial-no}
+    private-key-file-path: ${gxw.wechat.private-key-file-path}
+    api-v3-key: ${gxw.wechat.api-v3-key}
+    we-chat-pay-cert-file-path: ${gxw.wechat.we-chat-pay-cert-file-path}
+    notify-url: ${gxw.wechat.notify-url}
+    refund-notify-url: ${gxw.wechat.notify-url}

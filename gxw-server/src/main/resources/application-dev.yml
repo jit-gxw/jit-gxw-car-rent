@@ -1,0 +1,26 @@
+gxw:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: jit-gxw-car-rent
+    username: root
+    password: 1234
+  alioss:
+    endpoint: oss-cn-nanjing.aliyuncs.com
+    bucketName: jit-gxw-web
+  redis:
+    host: localhost
+    port: 6379
+    password: 1234
+    database: 0
+  wechat:
+    appid: wx6488a4d3748088b9
+    secret: cea484358e8c0430f9831a31a6c78151
+    mchid: #商户号
+    mch-serial-no:  #api证书
+    private-key-file-path: #私钥文件
+    api-v3-key: #解密密钥
+    we-chat-pay-cert-file-path: #平台证书
+    notify-url: https://29c4195d.r16.cpolar.top/notify/paySuccess#支付成功回调地址
+    refund-notify-url: https://29c4195d.r16.cpolar.top/notify/refundSuccess#退款成功回调地址

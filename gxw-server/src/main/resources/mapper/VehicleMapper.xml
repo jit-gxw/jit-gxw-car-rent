@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jit.gxw.mapper.VehicleMapper">
+    <update id="update">
+        update vehicle
+        <set>
+            <if test="licensePlateNumber!=null">
+                license_plate_number=#{licensePlateNumber},
+            </if>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="classificationId!=null">
+                classification_id=#{classificationId},
+            </if>
+            <if test="cashPledge!=null">
+                cash_pledge=#{cashPledge},
+            </if>
+            <if test="seating!=null">
+                seating=#{seating},
+            </if>
+            <if test="image!=null">
+                image=#{image},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="priceDay!=null">
+                price_day=#{priceDay},
+            </if>
+            <if test="priceMonth!=null">
+                price_month=#{priceMonth},
+            </if>
+            <if test="description!=null">
+                description=#{description},
+            </if>
+            <if test="buyingPrice!=null">
+                buying_price=#{buyingPrice},
+            </if>
+            <if test="updateTime!=null">
+                update_time=#{updateTime},
+            </if>
+            <if test="updateUser!=null">
+                update_user=#{updateUser},
+            </if>
+            <if test="isDel!=null">
+                is_del=#{isDel},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <select id="pageQuery" resultType="jit.gxw.vo.VehicleVO">
+        select vehicle.*,classification.name as classificationName
+        from vehicle left join classification on vehicle.classification_id=classification.id
+        <where>
+            <if test="classificationId!=null">
+                and classification_id=#{classificationId}
+            </if>
+            <if test="licensePlateNumber!=null">
+                and license_plate_number like concat('%',#{licensePlateNumber},'%')
+            </if>
+            <if test="name!=null">
+                and vehicle.name like concat('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                and vehicle.status=#{status}
+            </if>
+        and is_del=0
+        </where>
+    </select>
+</mapper>
