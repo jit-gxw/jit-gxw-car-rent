@@ -8,7 +8,6 @@ import jit.gxw.entity.Vehicle;
 import jit.gxw.result.PageResult;
 import jit.gxw.result.Result;
 import jit.gxw.service.VehicleService;
-import jit.gxw.vo.VehicleClassVO;
 import jit.gxw.vo.VehicleVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
