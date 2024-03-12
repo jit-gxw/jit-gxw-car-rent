@@ -69,4 +69,11 @@
         </where>
         order by notification_time desc
     </select>
+    <select id="getrepairStatistics" resultType="jit.gxw.vo.RepairReportVO">
+        select
+            count(*) as number,
+            vehicle.name
+        from fault left join vehicle on fault.vehicle_id = vehicle.id
+        group by vehicle.name
+    </select>
 </mapper>

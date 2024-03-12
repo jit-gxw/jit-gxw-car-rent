@@ -6,6 +6,8 @@ import jit.gxw.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Map;
+
 @Mapper
 public interface UserMapper {
     /**
@@ -42,4 +44,10 @@ public interface UserMapper {
      * @return
      */
     Page<User> page(UserPageQueryDTO userPageQueryDTO);
+    /**
+     * 根据动态条件来统计用户数量
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }

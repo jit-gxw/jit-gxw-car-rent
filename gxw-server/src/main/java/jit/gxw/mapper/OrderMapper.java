@@ -5,11 +5,13 @@ import jit.gxw.dto.OrderPageQueryDTO;
 import jit.gxw.dto.OrderUserPageDTO;
 import jit.gxw.entity.Orders;
 import jit.gxw.vo.OrderUserVO;
+import jit.gxw.vo.VehicleReportVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -101,4 +103,12 @@ public interface OrderMapper {
      */
     @Select("select * from orders where number=#{number} and is_del=0")
     Orders selectByNumber(String number);
+
+    List<VehicleReportVO> getReletStatistics();
+    /**
+     * 根据动态条件来统计营业额数据
+     * @param map
+     * @return
+     */
+    Double sumByMap(Map map);
 }
